@@ -15,6 +15,8 @@ executable(
     greeter_resources,
     'Application.vala',
     'FPrintUtils.vala',
+    'SettingsDaemon.vala',
+    'SubprocessSupervisor.vala',
     'MainWindow.vala',
     'PantheonAccountsServicePlugin.vala',
     'PromptText.vala',

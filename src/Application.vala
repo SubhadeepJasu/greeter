@@ -32,6 +32,9 @@ public class Greeter.Application : Gtk.Application {
         Intl.bind_textdomain_codeset (Constants.GETTEXT_PACKAGE, "UTF-8");
         Intl.textdomain (Constants.GETTEXT_PACKAGE);
         Intl.bindtextdomain (Constants.GETTEXT_PACKAGE, Constants.LOCALE_DIR);
+
+        var settings_daemon = new Greeter.SettingsDaemon ();
+        settings_daemon.start ();
     }
 
     protected override void startup () {
