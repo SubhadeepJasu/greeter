@@ -19,39 +19,64 @@
  * Authors: Corentin Noël <corentin@elementary.io>
  */
 
-public class Greeter.Application : Gtk.Application {
-    public Application () {
-        Object (
-            application_id: "io.elementary.greeter",
-            flags: ApplicationFlags.FLAGS_NONE
-        );
-    }
+//  public class Greeter.Application : Gtk.Application {
+//      public Application () {
+//          Object (
+//              application_id: "io.elementary.greeter",
+//              flags: ApplicationFlags.FLAGS_NONE
+//          );
+//      }
 
-    construct {
-        Intl.setlocale (LocaleCategory.ALL, "");
-        Intl.bind_textdomain_codeset (Constants.GETTEXT_PACKAGE, "UTF-8");
-        Intl.textdomain (Constants.GETTEXT_PACKAGE);
-        Intl.bindtextdomain (Constants.GETTEXT_PACKAGE, Constants.LOCALE_DIR);
+//      construct {
+//          Intl.setlocale (LocaleCategory.ALL, "");
+//          Intl.bind_textdomain_codeset (Constants.GETTEXT_PACKAGE, "UTF-8");
+//          Intl.textdomain (Constants.GETTEXT_PACKAGE);
+//          Intl.bindtextdomain (Constants.GETTEXT_PACKAGE, Constants.LOCALE_DIR);
+//      }
 
-        var settings_daemon = new Greeter.SettingsDaemon ();
-        settings_daemon.start ();
-    }
+//      protected override void startup () {
+//          base.startup ();
 
-    protected override void startup () {
-        base.startup ();
+//          var css_provider = new Gtk.CssProvider ();
+//          css_provider.load_from_resource ("/io/elementary/greeter/Application.css");
 
-        var css_provider = new Gtk.CssProvider ();
-        css_provider.load_from_resource ("/io/elementary/greeter/Application.css");
+//          Gtk.StyleContext.add_provider_for_screen (Gdk.Screen.get_default (), css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+//      }
 
-        Gtk.StyleContext.add_provider_for_screen (Gdk.Screen.get_default (), css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
-    }
+//      public override void activate () {
+//          add_window (new Greeter.MainWindow ());
+//          active_window.show_all ();
+//      }
 
-    public override void activate () {
-        add_window (new Greeter.MainWindow ());
-        active_window.show_all ();
-    }
+//      public static int main (string[] args) {
+//          var settings_daemon = new Greeter.SettingsDaemon ();
+//          settings_daemon.start ();
+//          return new Greeter.Application ().run (args);
+//      }
+//  }
 
-    public static int main (string[] args) {
-        return new Greeter.Application ().run (args);
-    }
+
+public int main (string[] args) {
+    Intl.setlocale (LocaleCategory.ALL, "");
+    Intl.bind_textdomain_codeset (Constants.GETTEXT_PACKAGE, "UTF-8");
+    Intl.textdomain (Constants.GETTEXT_PACKAGE);
+    Intl.bindtextdomain (Constants.GETTEXT_PACKAGE, Constants.LOCALE_DIR);
+
+    var settings_daemon = new Greeter.SettingsDaemon ();
+    settings_daemon.start ();
+
+    Gtk.init (ref args);
+
+    Bus.own_name (BusType.SESSION, "io.elementary.greeter", BusNameOwnerFlags.NONE);
+
+    var css_provider = new Gtk.CssProvider ();
+    css_provider.load_from_resource ("/io/elementary/greeter/Application.css");
+
+    Gtk.StyleContext.add_provider_for_screen (Gdk.Screen.get_default (), css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+
+    var window = new Greeter.MainWindow ();
+    window.show_all ();
+
+    Gtk.main ();
+    return 0;
 }
